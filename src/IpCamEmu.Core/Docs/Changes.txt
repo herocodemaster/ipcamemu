@@ -1,0 +1,22 @@
+﻿v 1.5.1
+
+Core: Ip Camera ensures one instance is running on each port.
+IpCamEmu.exe renamed to 'IpCamEmu Console.exe', IpCamEmuWPF.exe renamed to 'IpCamEmu GUI.exe', logs place changed to %temp%\HDE\IpCamEmu for both applications.
+IPCAMEMU-15: System.Net.HttpListenerException (0x80004005): Failed to listen on prefix 'http://localhost:2000/' because it conflicts with an existing registration on the machine.
+
+v 1.5
+
+Added Configurator: it reads application configuration and registers IP-camera in firewall (launches under elevated privileges).
+Documentation: service declaration documentation fix.
+Added Rgion of Interest: you can specify custom borders of frame you'd like to receive (this feature requires non-indexed images).
+Configurator: several bugs were fixed. Now it works as it should.
+
+v 1.4
+
+WMV source was deleted, because it has issues with some WMV files.
+However WMV files are still supported with videoFile source.
+
+v 1.3
+
+Improvements
+1. Wpf gui wrapper for demos & Setup (Configuration and firewall setup are still need to be handled manually).

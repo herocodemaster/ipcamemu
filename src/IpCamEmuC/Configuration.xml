@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--  
+QA Configuration (for data supplied with sources)
+
+Administrative Setup (one time):
+If your local computer user name is drweb86 and your computer name is comp, you must execute in executed in administrative mode cmd.exe as described in guide following commands,
+otherwise instead of computer name use your domain.
+netsh http add urlacl url=http://+:1777/ user=comp\drweb86 listen=yes
+netsh http add urlacl url=http://+:1776/ user=comp\drweb86 listen=yes
+netsh http add urlacl url=http://+:1775/ user=comp\drweb86 listen=yes
+netsh http add urlacl url=http://+:1774/ user=comp\drweb86 listen=yes
+netsh http add urlacl url=http://+:1880/ user=comp\drweb86 listen=yes
+-->
+<Configuration>
+  <Servers>
+    <Server Type="MJpeg">
+      <Uri>http://+:1777/</Uri>
+      <FrameDelay>1000</FrameDelay>
+      <Source Type="folder" Name="QA Images Sequence 'A'">
+        <Folder>..\qa\Images\Set A</Folder>
+        <InstanciateMode>InstancePerClient</InstanciateMode>
+        <Format>Jpeg</Format>
+        <BufferFrames>15</BufferFrames>
+      </Source>
+    </Server>
+    <!--<Server Type="MJpeg">
+      <Uri>http://+:1776/</Uri>
+      <FrameDelay>10</FrameDelay>
+      <Source Type="folder" Name="QA Images Sequence 'B'">
+        <Folder>..\qa\Images\Set B</Folder>
+        <InstanciateMode>InstancePerClient</InstanciateMode>
+        <Format>Jpeg</Format>
+        <BufferFrames>200</BufferFrames>
+      </Source>
+    </Server>
+    <Server Type="MJpeg">
+      <Uri>http://+:1775/</Uri>
+      <FrameDelay>10</FrameDelay>
+      <Source Type="webcam" Name="QA WebCam Test (Per Server)">
+        <InputVideoDeviceId>0</InputVideoDeviceId>
+        <Format>Jpeg</Format>
+        <ReadSpeed>20</ReadSpeed>
+        <CameraRealWidth>640</CameraRealWidth>
+        <CameraRealHeight>480</CameraRealHeight>
+        <RotateY>false</RotateY>
+      </Source>
+    </Server>
+    <Server Type="MJpeg">
+      <Uri>http://+:1774/</Uri>
+      <FrameDelay>100</FrameDelay>
+      <Source Type="videoFile" Name="QA WMV Testing">
+        <File>..\qa\Videos\REC_01.2011.wmv</File>
+        <InstanciateMode>InstancePerClient</InstanciateMode>
+        <Format>Jpeg</Format>
+        <BufferFrames>10000000</BufferFrames>
+        <TimeStart>0:00:00:10.0000</TimeStart>
+        <TimeEnd>0:00:00:40.0000</TimeEnd>
+        <TimeStep>0:00:00:01.0000</TimeStep>
+        <RotateY>true</RotateY>
+      </Source>
+    </Server>
+    <Server Type="MJpeg">
+      <Uri>http://+:1880/</Uri>
+      <FrameDelay>33</FrameDelay>
+      <Source Type="videoFile" Name="QA AVI Testing">
+        <File>..\qa\Videos\REC_01_2011.avi</File>
+        <InstanciateMode>InstancePerClient</InstanciateMode>
+        <Format>Jpeg</Format>
+        <BufferFrames>10000000</BufferFrames>
+        <TimeStart>0:00:00:10.0000</TimeStart>
+        <TimeEnd>0:00:00:40.0000</TimeEnd>
+        <TimeStep>0:00:00:01.0000</TimeStep>
+        <RotateY>true</RotateY>
+      </Source>
+    </Server>-->
+  </Servers>
+</Configuration>

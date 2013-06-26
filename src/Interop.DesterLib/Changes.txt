@@ -1,0 +1,40 @@
+According to InfromIcon article
+"Using IMediaDet GetBitmapBits in C#" by Daniel
+http://www.informikon.com/blog/using-imediadet-getbitmapbits-in-c.html
+
+1. Execute Visual Studio Command Prompt
+2. Cd <This Dir>
+2. Ildasm "Source Lib\Interop.DexterLib.dll" /out:Interop.DexterLib.il
+3. Changes
+-  .method public hidebysig newslot virtual 
+-          instance void  GetBitmapBits(float64 streamTime,
+-                                       int32& pBufferSize,
+-                                       uint8& pBuffer,
+-                                       int32 Width,
+-                                       int32 Height) runtime managed internalcall
++  .method public hidebysig newslot virtual 
++          instance void  GetBitmapBits(float64 streamTime,
++                                       int32& pBufferSize,
++                                       IntPtr pBuffer,
++                                       int32 Width,
++                                       int32 Height) runtime managed internalcall
+
+
+-  .method public hidebysig newslot abstract virtual 
+-          instance void  GetBitmapBits(float64 streamTime,
+-                                       int32& pBufferSize,
+-                                       uint8& pBuffer,
+-                                       int32 Width,
+-                                       int32 Height) runtime managed internalcall
+-  {
+-  } // end of method IMediaDet::GetBitmapBits
++  .method public hidebysig newslot abstract virtual 
++          instance void  GetBitmapBits(float64 streamTime,
++                                       int32& pBufferSize,
++                                       IntPtr pBuffer,
++                                       int32 Width,
++                                       int32 Height) runtime managed internalcall
++  {
++  } // end of method IMediaDet::GetBitmapBits
+
+4. ilasm Interop.DexterLib.il /NOLOGO /QUIET /DLL /RESOURCE=Interop.DexterLib.res /output="Output Lib\Interop.DexterLib.dll"

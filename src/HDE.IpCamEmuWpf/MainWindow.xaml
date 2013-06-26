@@ -1,0 +1,55 @@
+﻿<Window x:Class="HDE.IpCamEmuWpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:HDE.IpCamEmuWpf"
+        Title="IP Camera Emulator" Height="200" Width="200" MaxHeight="200" MaxWidth="200" MinHeight="200" MinWidth="200"
+        WindowStyle="None" MouseDown="OnMouseDown" SnapsToDevicePixels="True" x:Name="_mainWindow">
+  <Window.Resources>
+    <local:ServersStatusConverter x:Key="ServersStatusConverter" />
+    <local:ServersStatusDarkConverter x:Key="ServersStatusDarkConverter" />
+  </Window.Resources>
+  <Window.Background>
+    <SolidColorBrush Color="{Binding Path=ServersStatus, Converter={StaticResource ServersStatusConverter}}" />
+  </Window.Background>
+        <Border Background="{Binding ElementName=_mainWindow, Path=ServersStatus, Converter={StaticResource ServersStatusConverter}}" x:Name="_border">
+            <Border Margin="5" CornerRadius="10" Background="Black">
+                <Border Margin="5" CornerRadius="10">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5" SpreadMethod="Pad">
+                            <GradientStop Color="{Binding ElementName=_mainWindow, Path=ServersStatus, Converter={StaticResource ServersStatusConverter}}" Offset="0.0" />
+                            <GradientStop Color="{Binding ElementName=_mainWindow, Path=ServersStatus, Converter={StaticResource ServersStatusDarkConverter}}" Offset="1.0" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Canvas>
+                        <Rectangle Fill="Black" Width="12" Height="45" Canvas.Left="6" Canvas.Top="59"></Rectangle>
+                        <Rectangle Fill="Black" Width="32" Height="12" Canvas.Left="24" Canvas.Top="76"></Rectangle>
+                        <Ellipse Fill="Black" Width="21" Height="22" Canvas.Left="6" Canvas.Top="71"></Ellipse>
+                        <Ellipse Canvas.Left="53" Canvas.Top="71" Fill="Black" Height="22" Width="21" />
+                        <Rectangle Canvas.Left="85" Canvas.Top="63" Fill="Black" Height="8" Width="20">
+                            <Rectangle.RenderTransform>
+                                <RotateTransform Angle="132"></RotateTransform>
+                            </Rectangle.RenderTransform>
+                        </Rectangle>
+
+                        <Rectangle Canvas.Left="72" Canvas.Top="21" Fill="Black" Height="27" Width="69" RadiusX="2" RadiusY="2">
+                            <Rectangle.RenderTransform>
+                                <RotateTransform Angle="30"></RotateTransform>
+                            </Rectangle.RenderTransform>
+                        </Rectangle>
+
+                        <Rectangle Canvas.Left="63" Canvas.Top="46" Fill="Black" Height="4" Width="37" RadiusX="1" RadiusY="1">
+                            <Rectangle.RenderTransform>
+                                <RotateTransform Angle="30"></RotateTransform>
+                            </Rectangle.RenderTransform>
+                        </Rectangle>
+                        <Rectangle Canvas.Left="117" Canvas.Top="44" Fill="Black" Height="24" RadiusX="2" RadiusY="2" Width="21">
+                            <Rectangle.RenderTransform>
+                                <RotateTransform Angle="30" />
+                            </Rectangle.RenderTransform>
+                        </Rectangle>
+
+                    <Button Background="Red" FontWeight="Heavy" Foreground="White" Height="23" Width="25" Canvas.Right="7" Canvas.Top="6" Click="OnClose" ToolTip="Closes Application">X</Button>
+                </Canvas>
+                </Border>
+            </Border>
+        </Border>
+</Window>
