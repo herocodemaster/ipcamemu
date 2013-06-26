@@ -6,3 +6,5 @@ src/HDE.IpCamEmu.Configurator/obj/*
 src/HDE.IpCamEmuWpf/obj/*
 src/IpCamEmu.Core/obj/*
 src/IpCamEmuC/obj/*
+*.suo
+src/IpCamEmu.Core/bin/Release/*

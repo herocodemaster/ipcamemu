@@ -23,13 +23,13 @@ SET Operation=Prepare setup
 if %ERRORLEVEL% NEQ 0 GOTO FAILED_OPERATION;
 
 
+SET ZipSolution=C:\Program Files (x86)\ZipSolution-6.0\ZipSolution.Console.exe
 SET Operation=Package binaries
-"C:\Program Files (x86)\ZipSolution-5.9\ZipSolution.Console.exe" "SolutionFile=binaries.xml" "ExtractVersionFromAssemblyFile=..\Output\HDE.IpCamEmu.Core.dll"
+"%ZipSolution%" "SolutionFile=binaries.xml" "ExtractVersionFromAssemblyFile=..\Output\HDE.IpCamEmu.Core.dll"
 if %ERRORLEVEL% NEQ 0 GOTO FAILED_OPERATION;
 
-
 SET Operation=Package sources
-"C:\Program Files (x86)\ZipSolution-5.9\ZipSolution.Console.exe" "SolutionFile=sources.xml" "ExtractVersionFromAssemblyInfoCsFile=..\src\IpCamEmu.Core\Properties\AssemblyInfo.cs"
+"%ZipSolution%" "SolutionFile=sources.xml" "ExtractVersionFromAssemblyInfoCsFile=..\src\IpCamEmu.Core\Properties\AssemblyInfo.cs"
 if %ERRORLEVEL% NEQ 0 GOTO FAILED_OPERATION;
 
 goto ZipSolutionSourcesEnd

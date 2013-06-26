@@ -57,8 +57,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: "{#CompileOutputDir}\Configuration.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CompileOutputDir}\DirectShowLib-2005.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CompileOutputDir}\HDE.IpCamEmu.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#CompileOutputDir}\Console.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#CompileOutputDir}\Wpf.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CompileOutputDir}\IpCamEmu Console.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CompileOutputDir}\IpCamEmu GUI.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CompileOutputDir}\HDE.Platform.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CompileOutputDir}\Configurator.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#CompileOutputDir}\Docs\Changes.txt"; DestDir: "{app}\Docs"; Flags: ignoreversion
