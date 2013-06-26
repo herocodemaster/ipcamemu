@@ -1,0 +1,8 @@
+syntax: glob
+output/*
+src/_ReSharper.HDE.IpCamEmu/*
+src/IpCamEmu.Core/bin/Debug/*
+src/HDE.IpCamEmu.Configurator/obj/*
+src/HDE.IpCamEmuWpf/obj/*
+src/IpCamEmu.Core/obj/*
+src/IpCamEmuC/obj/*
