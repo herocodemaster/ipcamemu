@@ -55,6 +55,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\IpCamEmuC\CommandLineOptions.cs">
+      <Link>CommandLineOptions.cs</Link>
+    </Compile>
     <Compile Include="..\IpCamEmuC\ServerConfigurationHelper.cs">
       <Link>ServerConfigurationHelper.cs</Link>
     </Compile>

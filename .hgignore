@@ -8,3 +8,4 @@ src/IpCamEmu.Core/obj/*
 src/IpCamEmuC/obj/*
 *.suo
 src/IpCamEmu.Core/bin/Release/*
+src/HDE.IpCamEmu.sln.DotSettings.user

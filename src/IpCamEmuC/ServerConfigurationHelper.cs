@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Xml;
 using HDE.IpCamEmu.Core;
 using HDE.IpCamEmu.Core.MJpeg;
@@ -12,21 +13,61 @@ namespace HDE.IpCamEmu
 {
     static class ServerConfigurationHelper
     {
-        public static ServerSettingsBase[] Load()
+        /// <summary>
+        /// Configuration approach specification:
+        /// 
+        /// Configuration simplification.
+        /// Configuration.xml should be searched in the following order.
+        /// 1) command line argument -Configuration=path to configuration file (if any)
+        /// Relative paths are resolved relative to current folder.
+        /// 2) folder with application\Configuration.xml
+        /// 
+        /// Relative paths in sources are resolved relative to source location.
+        /// </summary>
+        /// <param name="customConfiguration">Command line argument (or null)</param>
+        /// <returns></returns>
+        public static ServerSettingsBase[] Load(string customConfiguration)
         {
+            string configurationToLoad;
+            if (customConfiguration != null)
+            {
+                if (Path.IsPathRooted(customConfiguration))
+                {
+                    configurationToLoad = customConfiguration;
+                }
+                else
+                {
+                    configurationToLoad = new FileInfo(
+                        Path.Combine(
+                            Directory.GetCurrentDirectory(),
+                            customConfiguration))
+                        .FullName;
+                }
+            }
+            else
+            {
+                configurationToLoad = new FileInfo(
+                    Path.Combine(
+                        Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                        "Configuration.xml"))
+                    .FullName;
+            }
+
             var result = new List<ServerSettingsBase>();
 
             var document = new XmlDocument();
-            document.Load("Configuration.xml");
+            document.Load(configurationToLoad);
 
             var servers = document.SelectNodes("//Configuration/Servers/Server");
+            var rootPath = Path.GetDirectoryName(configurationToLoad);
+
             foreach (XmlNode serverConfig in servers)
             {
                 var configType = serverConfig.Attributes["Type"].Value.ToLowerInvariant();
                 switch (configType)
                 {
                     case "mjpeg":
-                        result.Add(CreateMjpegConfig(serverConfig));
+                        result.Add(CreateMjpegConfig(serverConfig, rootPath));
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(configType);
@@ -35,26 +76,26 @@ namespace HDE.IpCamEmu
             return result.ToArray();
         }
 
-        private static ServerSettingsBase CreateMjpegConfig(XmlNode document)
+        private static ServerSettingsBase CreateMjpegConfig(XmlNode document, string rootPath)
         {
             return new MJpegServerSettings(
                 document.SelectSingleNode("Uri").InnerText,
                 uint.Parse(document.SelectSingleNode("FrameDelay").InnerText),
-                CreateSource(document.SelectSingleNode("Source"))
+                CreateSource(document.SelectSingleNode("Source"), rootPath)
                 );
         }
 
-        private static SourceSettings CreateSource(XmlNode document)
+        private static SourceSettings CreateSource(XmlNode document, string rootPath)
         {
             var sourceType = document.SelectSingleNode("@Type").InnerText;
             SourceSettings result;
             switch (sourceType.ToLowerInvariant())
             {
                 case "videofile":
-                    result = CreateVideoFileSettings(document);
+                    result = CreateVideoFileSettings(document, rootPath);
                     break;
                 case "folder":
-                    result = CreateFolderSettings(document);
+                    result = CreateFolderSettings(document, rootPath);
                     break;
                 case "webcam":
                     result = CreateWebCamSettings(document);
@@ -83,13 +124,13 @@ namespace HDE.IpCamEmu
                        };
         }
 
-        private static SourceSettings CreateFolderSettings(XmlNode document)
+        private static SourceSettings CreateFolderSettings(XmlNode document, string rootPath)
         {
             return new FolderSettings()
                        {
                            InstanciateMode = ParseInstanciateMode(document.SelectSingleNode("InstanciateMode").InnerText),
                            BufferFrames = uint.Parse(document.SelectSingleNode("BufferFrames").InnerText),
-                           Folder = new DirectoryInfo(document.SelectSingleNode("Folder").InnerText).FullName,
+                           Folder = ResolvePath(document.SelectSingleNode("Folder").InnerText, rootPath, true),
                            RegionOfInterest = ParseRegionOfInterest(document),
                        };
         }
@@ -99,14 +140,14 @@ namespace HDE.IpCamEmu
             return TimeSpan.ParseExact(text, "G", CultureInfo.InvariantCulture);
         }
 
-        private static SourceSettings CreateVideoFileSettings(XmlNode document)
+        private static SourceSettings CreateVideoFileSettings(XmlNode document, string rootPath)
         {
             return new VideoFileSettings
             {
                 InstanciateMode = ParseInstanciateMode(document.SelectSingleNode("InstanciateMode").InnerText),
                 RotateY = bool.Parse(document.SelectSingleNode("RotateY").InnerText),
 
-                File = new FileInfo(document.SelectSingleNode("File").InnerText).FullName,
+                File = ResolvePath(document.SelectSingleNode("File").InnerText, rootPath, false),
                 BufferFrames = uint.Parse(document.SelectSingleNode("BufferFrames").InnerText),
                 TimeStart = ParseTimeSpan(document.SelectSingleNode("TimeStart").InnerText),
                 TimeEnd = ParseTimeSpan(document.SelectSingleNode("TimeEnd").InnerText),
@@ -114,6 +155,20 @@ namespace HDE.IpCamEmu
 
                 RegionOfInterest = ParseRegionOfInterest(document)
             };
+        }
+
+        private static string ResolvePath(string path, string root, bool isPathToFolder)
+        {
+            string realPath = path;
+            if (!Path.IsPathRooted(realPath))
+            {
+                realPath = Path.Combine(root, realPath);
+            }
+
+            return isPathToFolder ?
+                    new DirectoryInfo(realPath).FullName :
+                    new FileInfo(realPath).FullName;
+            
         }
 
         private static InstanciateMode ParseInstanciateMode(string value)

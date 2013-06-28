@@ -9,7 +9,7 @@ namespace HDE.IpCamEmu
 {
     class Program
     {
-        static int Main()
+        static int Main(string[] args)
         {
             var log = new QueueLog(
                 new ConsoleLog(),
@@ -19,7 +19,8 @@ namespace HDE.IpCamEmu
             try
             {
                 log.Debug("Loading settings...");
-                var settings = ServerConfigurationHelper.Load();
+                var settings = ServerConfigurationHelper.Load(
+                    CommandLineOptions.ParseCommandLineArguments(args).Configuration);
                 log.Debug("Starting machinery...");
                 List<IDisposable> servers = null;
                 try

@@ -1,4 +1,13 @@
-﻿v 1.5.1
+﻿v 1.5.2
+
+IPCAMEMU-6: Demo scripts: fixed.
+IPCAMEMU-18: Pass Configuration via Command Line: it is possitble to set alternate configuration via command line argument as shown below
+"<Configurator|IpCamEmu GUI.exe|IpCamEmu Console.exe>" "-Configuration=full path"
+"<Configurator|IpCamEmu GUI.exe|IpCamEmu Console.exe>" "-Configuration=relative path"
+Relative paths are resolved relative to current directory.
+IPCAMEMU-22: Relative paths in source must be resolved relative to configuration file location.
+
+v 1.5.1
 
 Core: Ip Camera ensures one instance is running on each port.
 IpCamEmu.exe renamed to 'IpCamEmu Console.exe', IpCamEmuWPF.exe renamed to 'IpCamEmu GUI.exe', logs place changed to %temp%\HDE\IpCamEmu for both applications.
