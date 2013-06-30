@@ -5,6 +5,7 @@ IPCAMEMU-18: Pass Configuration via Command Line: it is possitble to set alterna
 "<Configurator|IpCamEmu GUI.exe|IpCamEmu Console.exe>" "-Configuration=full path"
 "<Configurator|IpCamEmu GUI.exe|IpCamEmu Console.exe>" "-Configuration=relative path"
 Relative paths are resolved relative to current directory.
+IPCAMEMU-21: Each source must be handled by separate process.
 IPCAMEMU-22: Relative paths in source must be resolved relative to configuration file location.
 
 v 1.5.1

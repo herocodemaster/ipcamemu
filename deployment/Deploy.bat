@@ -28,16 +28,12 @@ SET Operation=Package binaries
 "%ZipSolution%" "SolutionFile=binaries.xml" "ExtractVersionFromAssemblyFile=..\Output\HDE.IpCamEmu.Core.dll"
 if %ERRORLEVEL% NEQ 0 GOTO FAILED_OPERATION;
 
-SET Operation=Package sources
-"%ZipSolution%" "SolutionFile=sources.xml" "ExtractVersionFromAssemblyInfoCsFile=..\src\IpCamEmu.Core\Properties\AssemblyInfo.cs"
-if %ERRORLEVEL% NEQ 0 GOTO FAILED_OPERATION;
-
-goto ZipSolutionSourcesEnd
+goto OK
 
 :FAILED_OPERATION
 echo FAILED: %Operation% 
 pause
-goto ZipSolutionSourcesEnd
+goto OK
 
-:ZipSolutionSourcesEnd
+:OK
 @echo on

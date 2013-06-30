@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "IpCamEmu"
-#define MyAppVersion "1.5"
+#define MyAppVersion "1.5.2"
 #define MyAppPublisher "Siarhei Kuchuk"
 #define MyAppURL "http://ipcamemu.codeplex.com/"
 #define MyAppExeName "IpCamEmu GUI.exe"

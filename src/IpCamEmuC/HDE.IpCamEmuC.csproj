@@ -47,6 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\IpCamEmu.Core\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="ChiefWorker\ChiefConsole.cs" />
     <Compile Include="ChiefWorker\Worker.cs" />
     <Compile Include="Program.cs" />

@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GlobalAssemblyInfo.cs" />
     <Compile Include="Log\AnonymousPipeClientStreamLog.cs" />
     <Compile Include="ChiefWorker\Chief.cs" />
     <Compile Include="ChiefWorker\ChiefWorkerPredefinedMessages.cs" />
