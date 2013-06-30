@@ -1,3 +1,5 @@
+using System;
+using System.Windows.Threading;
 using HDE.IpCamEmu.Core.Log;
 using HDE.IpCamEmuWpf.Commands;
 using HDE.IpCamEmuWpf.Model;
@@ -28,9 +30,12 @@ namespace HDE.IpCamEmuWpf
 
         #region Commands
 
-        public bool Start()
+        public void Start(
+            Dispatcher dispatcher,
+            Action onInitializeCompleted,
+            Action<string> onError)
         {
-            return new StartServesrCmd().StartServers(this);
+            new StartServesrCmd().StartServers(this, dispatcher, onInitializeCompleted, onError);
         }
 
         public void TearDown()

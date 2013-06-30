@@ -37,8 +37,9 @@ namespace HDE.IpCamEmu.Core.ChiefWorker
 
         #region Protected Methods
 
-        protected abstract string GetExitOnDemandMessage();
         protected abstract bool IsExitOnDemand();
+        protected abstract void ReadyToAcceptClients();
+        protected abstract void ErrorOccured(string error);
 
         #endregion
 
@@ -66,7 +67,9 @@ namespace HDE.IpCamEmu.Core.ChiefWorker
                         Thread.Sleep(1000);
                     }
 
-                    _log.Debug("Server(s) started...\n\n{0}", GetExitOnDemandMessage());
+                    _log.Debug("Server(s) started...");
+                    ReadyToAcceptClients();
+
                     while (!IsExitOnDemand() && workers.All(worker => worker.IsAlive))
                     {
                         Thread.Sleep(3000);
@@ -74,13 +77,15 @@ namespace HDE.IpCamEmu.Core.ChiefWorker
 
                     if (!workers.All(worker => worker.IsAlive))
                     {
-                        _log.Error("Some workers are not alive: {0}", 
+                        var error = string.Format("The following sources does not work: {0}",
                             string.Join(
-                                ", ", 
+                                ", ",
                                 workers
-                                    .Where(worker=>!worker.IsAlive)
-                                    .Select(worker=>worker.Name)
+                                    .Where(worker => !worker.IsAlive)
+                                    .Select(worker => worker.Name)
                                     .ToArray()));
+                        _log.Error(error);
+                        ErrorOccured(error);
                         return false;
                     }
                 }

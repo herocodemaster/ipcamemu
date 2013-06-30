@@ -73,19 +73,21 @@ namespace HDE.IpCamEmuWpf
             Close();
         }
 
+        private void OnError(string error)
+        {
+            ServersStatus = ServersStatus.FailedToStart;
+            ToolTip = string.Format("Emulator failed with error:\n\n{0}\n\nSee logs for details...", error);
+        }
+
+        private void OnInitializationCompleted()
+        {
+            ServersStatus = ServersStatus.Running;
+            ToolTip = "Emulator is running...";
+        }
+
         private void StartMachinery()
         {
-            if  (_controller.Start())
-            {
-                ServersStatus = ServersStatus.Running;
-                ToolTip = "Emulator is running...";
-            }
-            else
-            {
-                ServersStatus = ServersStatus.FailedToStart;
-                ToolTip = "Emulator failed with error.\n\nSee logs for details...";
-            }
-            
+            _controller.Start(Dispatcher, OnInitializationCompleted, OnError);
         }
     }
 

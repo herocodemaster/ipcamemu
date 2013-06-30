@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Windows.Threading;
 using HDE.IpCamEmu.Core.ConfigurationStaff;
 using HDE.IpCamEmuWpf.ChiefWorker;
 
@@ -6,22 +8,22 @@ namespace HDE.IpCamEmuWpf.Commands
 {
     class StartServesrCmd
     {
-        public bool StartServers(Controller controller)
+        public void StartServers(Controller controller, 
+            Dispatcher dispatcher,
+            Action onInitializeCompleted,
+            Action<string> onError)
         {
-            try
-            {
-                controller.Model.Chief = new ChiefWpf(
+            controller.Model.Chief = new ChiefWpf(
                     controller.Log,
                     CommandLineOptions.ParseCommandLineArguments(
-                        CommandLineOptions.GetCurrentProcessCommandLineArguments()));
-                return controller.Model.Chief.Launch();
+                        CommandLineOptions.GetCurrentProcessCommandLineArguments()),
+                    dispatcher,
+                    onInitializeCompleted,
+                    onError);
 
-            }
-            catch (Exception unhandledException)
-            {
-                controller.Log.Error(unhandledException);
-                return false;
-            }
+                
+            new Thread(() => controller.Model.Chief.Launch()) {IsBackground = true}
+                .Start(); // do not keep reference because launch.
         }
     }
 }

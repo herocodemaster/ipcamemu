@@ -1,4 +1,6 @@
-﻿namespace HDE.IpCamEmuWpf.Commands
+﻿using System.Threading;
+
+namespace HDE.IpCamEmuWpf.Commands
 {
     class TearDownCmd
     {
@@ -7,6 +9,9 @@
             if (controller.Model.Chief != null)
             {
                 controller.Model.Chief.RequestToClose();
+                Thread.Sleep(5000);
+                controller.Model.Chief.Dispose();
+                controller.Model.Chief = null;
             }
         }
     }

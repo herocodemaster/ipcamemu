@@ -17,11 +17,6 @@ namespace HDE.IpCamEmu.ChiefWorker
         {
         }
 
-        protected override string GetExitOnDemandMessage()
-        {
-            return "Press any key to exit.";
-        }
-
         protected override bool IsExitOnDemand()
         {
             var result = Console.KeyAvailable;
@@ -30,6 +25,16 @@ namespace HDE.IpCamEmu.ChiefWorker
                 Console.ReadKey(false); // we need to read key send to app before quit.
             }
             return result;
+        }
+
+        protected override void ReadyToAcceptClients()
+        {
+            _log.Debug("\n\nPress any key to exit.");
+        }
+
+        protected override void ErrorOccured(string error)
+        {
+            Console.Title = error;
         }
 
         public override void Dispose()
