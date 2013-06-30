@@ -49,8 +49,8 @@ namespace HDE.IpCamEmu.Core.Source
 
         #region Constructors
 
-        public FolderSource(ILog log, string name, string folder, ImageFormat format, uint bufferFrames, Region regionOfInterest)
-            : base(log, name, format, regionOfInterest)
+        public FolderSource(ILog log, string folder, ImageFormat format, uint bufferFrames, Region regionOfInterest)
+            : base(log, format, regionOfInterest)
         {
             _folder = folder;
             _bufferFrames = bufferFrames;
@@ -69,7 +69,7 @@ namespace HDE.IpCamEmu.Core.Source
 
         public override ISourceServerCache PrepareSourceServerCache()
         {
-            _log.Debug("{0}: Reading folder contents...", _name);
+            _log.Debug("Reading folder contents...");
             const string supportedExtensions = "*.jpg,*.gif,*.png,*.bmp,*.jpe,*.jpeg,*.wmf,*.emf,*.xbm,*.ico,*.eps,*.tif,*.tiff,*.g01,*.g02,*.g03,*.g04,*.g05,*.g06,*.g07,*.g08";
             var images = Directory
                 .GetFiles(_folder, "*.*", SearchOption.AllDirectories)
@@ -104,14 +104,14 @@ namespace HDE.IpCamEmu.Core.Source
                 }
             }
 
-            _log.Debug("{0}: Caching...", _name);
+            _log.Debug("Caching...");
             foreach (var image in needCache)
             {
-                _log.Debug("{0}: Caching {1}...", _name, image);
+                _log.Debug("Caching {0}...", image);
                 processed.Add(image, LoadFrame(_format, _regionOfInterest, image));
             }
 
-            _log.Debug("{0}: Caching completed!", _name);
+            _log.Debug("Caching completed!");
             return new FolderServerCache(images, processed);
         }
 

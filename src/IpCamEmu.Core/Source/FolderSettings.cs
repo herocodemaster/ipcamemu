@@ -18,7 +18,7 @@ namespace HDE.IpCamEmu.Core.Source
 
         internal override ISource Create(ILog log)
         {
-            return new FolderSource(log, Name, new DirectoryInfo(Folder).FullName, GetFormat(), BufferFrames, RegionOfInterest);
+            return new FolderSource(log, new DirectoryInfo(Folder).FullName, GetFormat(), BufferFrames, RegionOfInterest);
         }
 
         #endregion

@@ -56,7 +56,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnonymousPipeClientStreamLog.cs" />
+    <Compile Include="ChiefWorker\Chief.cs" />
     <Compile Include="ChiefWorker\ChiefWorkerPredefinedMessages.cs" />
+    <Compile Include="ChiefWorker\ChiefWorkerProcess.cs" />
     <Compile Include="ChiefWorker\ChiefWorkerSettingsHelper.cs" />
     <Compile Include="ConfigurationStaff\CommandLineOptions.cs" />
     <Compile Include="ConfigurationStaff\ConfigurationHelper.cs" />

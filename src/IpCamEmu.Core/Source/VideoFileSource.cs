@@ -91,7 +91,6 @@ namespace HDE.IpCamEmu.Core.Source
         #region Constructors
 
         public VideoFileSource(ILog log, 
-            string name,
             ImageFormat format, 
             string file, 
             uint bufferFrames, 
@@ -100,7 +99,7 @@ namespace HDE.IpCamEmu.Core.Source
             TimeSpan timeStep, 
             bool rotateY,
             Region regionOfInterest)
-            : base(log, name, format, regionOfInterest)
+            : base(log, format, regionOfInterest)
         {
             _file = file;
             _bufferFrames = bufferFrames;
@@ -116,7 +115,7 @@ namespace HDE.IpCamEmu.Core.Source
 
         public override ISourceServerCache PrepareSourceServerCache()
         {
-            _log.Debug("{0}: Opening the video file {1}...", _name, _file);
+            _log.Debug("Opening the video file {0}...", _file);
 
             int width;
             int height;
@@ -155,11 +154,11 @@ namespace HDE.IpCamEmu.Core.Source
                 }
             }
 
-            _log.Debug("{0}: Caching video...", _name);
+            _log.Debug("Caching video...");
             foreach (var imageNo in needCache)
             {
                 var position = result.GetStreamPosition(imageNo);
-                _log.Debug("{0}: Caching at {1} sec...", _name, position);
+                _log.Debug("Caching at {0} sec...", position);
                 result.Processed.Add(imageNo, MediaDetHelper.LoadFrame(
                     mediaDet, 
                     position, 
@@ -171,7 +170,7 @@ namespace HDE.IpCamEmu.Core.Source
                     _regionOfInterest));
             }
 
-            _log.Debug("{0}: Caching completed!", _name);
+            _log.Debug("Caching completed!");
             
             return result;
         }

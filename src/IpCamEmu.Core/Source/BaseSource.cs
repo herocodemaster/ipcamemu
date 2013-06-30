@@ -7,7 +7,6 @@ namespace HDE.IpCamEmu.Core.Source
     {
         #region Fields
 
-        protected readonly string _name;
         protected readonly ImageFormat _format;
         protected readonly ILog _log;
         protected readonly Region _regionOfInterest;
@@ -36,12 +35,10 @@ namespace HDE.IpCamEmu.Core.Source
         
         protected BaseSource(
             ILog ILog, 
-            string name, 
             ImageFormat format, 
             Region regionOfInterest)
         {
             _log = ILog;
-            _name = name;
             _format = format;
             _regionOfInterest = regionOfInterest;
         }

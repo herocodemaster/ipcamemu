@@ -22,7 +22,6 @@ namespace HDE.IpCamEmu.Core.Source
         {
             return new VideoFileSource(
                 log, 
-                Name, 
                 GetFormat(), 
                 new FileInfo(File).FullName, 
                 BufferFrames, 

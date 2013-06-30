@@ -4,6 +4,12 @@ namespace HDE.IpCamEmu.Core.ConfigurationStaff
 {
     public class CommandLineOptions
     {
+        #region Constants
+
+        public const string SettingName_WorkerSettingsPipeHandle = "WorkerSettingsPipeHandle";
+
+        #endregion
+
         #region Properties
 
         /// <summary>
@@ -13,11 +19,9 @@ namespace HDE.IpCamEmu.Core.ConfigurationStaff
 
         /// <summary>
         /// Internal usage. 
-        /// 
-        /// Interprocess communication via anonymous pipes.
-        /// Pipe handle for Chief controlling Worker.
+        /// Settings pipe for transferring setting from Chief to Worker.
         /// </summary>
-        public string WorkerPipeControl { get; private set; }
+        public string WorkerSettingsPipeHandle { get; private set; }
 
         #endregion
 
@@ -45,9 +49,9 @@ namespace HDE.IpCamEmu.Core.ConfigurationStaff
                     result.Configuration = options["Configuration"];
                 }
 
-                if (options.ContainsKey("WorkerPipeControl"))
+                if (options.ContainsKey(SettingName_WorkerSettingsPipeHandle))
                 {
-                    result.WorkerPipeControl = options["WorkerPipeControl"];
+                    result.WorkerSettingsPipeHandle = options[SettingName_WorkerSettingsPipeHandle];
                 }
             }
             catch

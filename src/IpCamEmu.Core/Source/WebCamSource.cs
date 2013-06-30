@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing.Imaging;
+﻿using System.Drawing.Imaging;
 using HDE.Platform.Logging;
 
 namespace HDE.IpCamEmu.Core.Source
@@ -21,7 +20,6 @@ namespace HDE.IpCamEmu.Core.Source
 
         public WebCamSource(
             ILog log,
-            string name,
             int inputVideoDeviceId,
             uint readSpeed,
             uint width,
@@ -29,7 +27,7 @@ namespace HDE.IpCamEmu.Core.Source
             bool rotateY,
             ImageFormat format,
             Region regionOfInterest)
-            : base(log, name, format, regionOfInterest)
+            : base(log, format, regionOfInterest)
         {
             _inputVideoDeviceId = inputVideoDeviceId;
             _readSpeed = readSpeed;

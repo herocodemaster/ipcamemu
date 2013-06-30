@@ -25,7 +25,6 @@ namespace HDE.IpCamEmu.Core.Source
 
             return new WebCamSource(
                 log, 
-                Name, 
                 InputVideoDeviceId, 
                 ReadSpeed, 
                 Width, 

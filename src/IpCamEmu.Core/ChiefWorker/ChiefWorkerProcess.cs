@@ -4,35 +4,44 @@ using System.IO;
 using System.IO.Pipes;
 using System.Reflection;
 using System.Threading;
+using HDE.IpCamEmu.Core.ConfigurationStaff;
 using HDE.Platform.Logging;
 
 namespace HDE.IpCamEmu.Core.ChiefWorker
 {
-    public class ChiefWorkerProcess : IDisposable
+    /// <summary>
+    /// Worker process for its management by Chief.
+    /// </summary>
+    class ChiefWorkerProcess : IDisposable
     {
         #region Fields
 
-        private Process _workerProcess;
-
         private ILog _log;
-        private Thread _logReceiverThread;
+        private ServerSettingsBase _settings;
+        
         private AnonymousPipeServerStream _logReceiverPipe;
+        private Thread _logReceiverThread;
 
+        private volatile Process _process;
+        private Thread _launchProcessThread;
+        
         #endregion
 
         #region Properties
 
-        /// <summary>
-        /// Indicates that worker is under initialization
-        /// </summary>
-        public bool IsStartingMachinery { get; private set; }
+        public string Name { get; private set; }
 
         /// <summary>
-        /// Indicates that worker is under initialization
+        /// Indicates that worker built cache and ready to accept client connections.
+        /// </summary>
+        public bool ReadyToAcceptClients { get; private set; }
+
+        /// <summary>
+        /// Indicates that worker is alive
         /// </summary>
         public bool IsAlive 
         {
-            get { return _workerProcess != null; } 
+            get { return _process != null; } 
         }
 
         #endregion
@@ -41,49 +50,65 @@ namespace HDE.IpCamEmu.Core.ChiefWorker
 
         public ChiefWorkerProcess(
             ILog log,
-            ServerSettingsBase serverSettings)
+            ServerSettingsBase workerSettings)
         {
-            IsStartingMachinery = true;
             _log = log;
+            _settings = workerSettings;
+            Name = _settings.SourceSettings.Name;
+
             _logReceiverPipe = new AnonymousPipeServerStream(PipeDirection.In, HandleInheritability.Inheritable);
             _logReceiverThread = new Thread(LogReceiverThreadJob)
-                                     {
-                                         IsBackground = true,
-                                     };
+                {
+                    IsBackground = true
+                };
+
+            _process = new Process
+                {
+                    EnableRaisingEvents = true,
+                    StartInfo =
+                        {
+                            FileName = Path.Combine(
+                                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                                "IpCamEmu Console.exe"),
+                            UseShellExecute = false,
+                            ErrorDialog = false,
+                            CreateNoWindow = true
+                        }
+                };
+            _process.Exited += delegate { _process = null; };
+
+            _launchProcessThread = new Thread(LaunchWorkerThreadJob)
+                {
+                    IsBackground = true
+                };
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public void LaunchAsync()
+        {
+            _launchProcessThread.Start();
             _logReceiverThread.Start();
-
-            _workerProcess = new Process
-                                 {
-                                     EnableRaisingEvents = true,
-                                     StartInfo =
-                                         {
-                                             FileName = Path.Combine(
-                                                 Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-                                                 "IpCamEmu Console.exe"),
-                                             UseShellExecute = false,
-                                             ErrorDialog = false,
-                                             CreateNoWindow = true
-                                         }
-                                 };
-
-            _workerProcess.Exited += delegate 
-                                         { 
-                                             _workerProcess = null;
-                                         };
-
-            ChiefWorkerSettingsHelper.SendSettings(
-                controlPipeHandle =>
-                    {
-                        _workerProcess.StartInfo.Arguments = String.Format("\"-WorkerPipeControl={0}\"", controlPipeHandle);
-                        _workerProcess.Start();
-                    },
-                _logReceiverPipe,
-                serverSettings);
         }
 
         #endregion
 
         #region Private Methods
+
+        private void LaunchWorkerThreadJob()
+        {
+            ChiefWorkerSettingsHelper.SendSettings(
+                settingsPipeHandle =>
+                {
+                    _process.StartInfo.Arguments = String.Format("\"-{0}={1}\"", CommandLineOptions.SettingName_WorkerSettingsPipeHandle, settingsPipeHandle);
+                    _process.Start();
+                },
+                _logReceiverPipe,
+                _settings,
+                Process.GetCurrentProcess());
+        }
 
         private void LogReceiverThreadJob()
         {
@@ -94,13 +119,13 @@ namespace HDE.IpCamEmu.Core.ChiefWorker
                     var eventType = (LoggingEvent) binaryReader.ReadInt32();
                     var message = binaryReader.ReadString();
 
-                    if (message == ChiefWorkerPredefinedMessages.WorkerReady)
+                    if (message == ChiefWorkerPredefinedMessages.WorkerReadyToAcceptClients)
                     {
-                        IsStartingMachinery = false;
+                        ReadyToAcceptClients = true;
                     }
                     else
                     {
-                        _log.Write(eventType, message);
+                        _log.Write(eventType, string.Format("{0}: {1}", Name, message));
                     }
                 }
             }
@@ -112,9 +137,21 @@ namespace HDE.IpCamEmu.Core.ChiefWorker
         {
             try
             {
-                if (_workerProcess != null)
+                if (_launchProcessThread != null)
                 {
-                    _workerProcess.Kill();
+                    _launchProcessThread.Abort();
+                    _launchProcessThread = null;
+                }
+            }
+            catch
+            {
+            }
+
+            try
+            {
+                if (_process != null)
+                {
+                    _process.Kill();
                 }
             }
             catch
