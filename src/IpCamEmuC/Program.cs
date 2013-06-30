@@ -18,14 +18,10 @@ namespace HDE.IpCamEmu
         static int Main(string[] args)
         {
             var options = CommandLineOptions.ParseCommandLineArguments(args);
-            if (options.WorkerPipeControl == null)
-            {
-                return LaunchChief(options);
-            }
-            else
-            {
-                return LaunchWorker(options);
-            }
+
+            return options.WorkerPipeControl == null ?
+                LaunchChief(options):
+                LaunchWorker(options);
         }
 
         private static int LaunchWorker(CommandLineOptions options)
@@ -34,7 +30,7 @@ namespace HDE.IpCamEmu
             ServerSettingsBase settings;
 
             // Initializing.
-            ControlPipeController.ReadSettings(
+            ChiefWorkerSettingsHelper.ReadSettings(
                 options.WorkerPipeControl,
 
                 out log,
@@ -46,7 +42,7 @@ namespace HDE.IpCamEmu
                 try
                 {
                     server = WebServerFactory.CreateServer(log, settings);
-                    log.Debug(_startedMessage);
+                    log.Debug(ChiefWorkerPredefinedMessages.WorkerReady);
                     Console.ReadLine();
                 }
                 finally
@@ -74,7 +70,7 @@ namespace HDE.IpCamEmu
             }
         }
 
-        private class WorkerProcessController : IDisposable
+        private class ChiefWorkerProcess : IDisposable
         {
             #region Fields
 
@@ -105,7 +101,7 @@ namespace HDE.IpCamEmu
 
             #region Constructors
 
-            public WorkerProcessController(
+            public ChiefWorkerProcess(
                 ILog log,
                 ServerSettingsBase serverSettings)
             {
@@ -137,16 +133,14 @@ namespace HDE.IpCamEmu
                         _workerProcess = null;
                     };
 
-                using (var controlPipe = new AnonymousPipeServerStream(PipeDirection.Out, HandleInheritability.Inheritable))
-                {
-                    _workerProcess.StartInfo.Arguments = string.Format("\"-WorkerPipeControl={0}\"", controlPipe.GetClientHandleAsString());
-                    _workerProcess.Start();
-
-                    ControlPipeController.SendSettings(
-                        controlPipe,
-                        _logReceiverPipe,
-                        serverSettings);
-                }
+                ChiefWorkerSettingsHelper.SendSettings(
+                    controlPipeHandle =>
+                            {
+                                _workerProcess.StartInfo.Arguments = string.Format("\"-WorkerPipeControl={0}\"", controlPipeHandle);
+                                _workerProcess.Start();
+                            },
+                    _logReceiverPipe,
+                    serverSettings);
             }
 
             #endregion
@@ -162,7 +156,7 @@ namespace HDE.IpCamEmu
                         var eventType = (LoggingEvent) binaryReader.ReadInt32();
                         var message = binaryReader.ReadString();
 
-                        if (message == _startedMessage)
+                        if (message == ChiefWorkerPredefinedMessages.WorkerReady)
                         {
                             IsStartingMachinery = false;
                         }
@@ -216,8 +210,6 @@ namespace HDE.IpCamEmu
             }
         }
 
-        private const string _startedMessage = "Worker started...";
-
         static int LaunchChief(CommandLineOptions options)
         {
             var log = new QueueLog(
@@ -230,12 +222,12 @@ namespace HDE.IpCamEmu
                 log.Debug("Loading settings...");
                 var settings = ConfigurationHelper.Load(options.Configuration);
                 log.Debug("Starting machinery...");
-                List<WorkerProcessController> workers = new List<WorkerProcessController>();
+                List<ChiefWorkerProcess> workers = new List<ChiefWorkerProcess>();
                 try
                 {
                     foreach (var setting in settings)
                     {
-                        workers.Add(new WorkerProcessController(log, setting));
+                        workers.Add(new ChiefWorkerProcess(log, setting));
                     }
 
                     while (workers.All(worker => worker.IsAlive && worker.IsStartingMachinery))

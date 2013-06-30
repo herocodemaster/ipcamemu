@@ -56,7 +56,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnonymousPipeClientStreamLog.cs" />
-    <Compile Include="ChiefWorker\ControlPipeController.cs" />
+    <Compile Include="ChiefWorker\ChiefWorkerPredefinedMessages.cs" />
+    <Compile Include="ChiefWorker\ChiefWorkerSettingsHelper.cs" />
     <Compile Include="ConfigurationStaff\CommandLineOptions.cs" />
     <Compile Include="ConfigurationStaff\ConfigurationHelper.cs" />
     <Compile Include="IpCamEmuSingleInstance.cs" />
