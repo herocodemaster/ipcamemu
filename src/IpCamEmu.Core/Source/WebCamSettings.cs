@@ -3,6 +3,7 @@ using HDE.Platform.Logging;
 
 namespace HDE.IpCamEmu.Core.Source
 {
+    [Serializable]
     public class WebCamSettings : SourceSettings
     {
         #region Properties
@@ -30,7 +31,7 @@ namespace HDE.IpCamEmu.Core.Source
                 Width, 
                 Height, 
                 RotateY, 
-                Format,
+                GetFormat(),
                 RegionOfInterest);
         }
     }

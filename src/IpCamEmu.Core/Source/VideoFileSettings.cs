@@ -4,6 +4,7 @@ using HDE.Platform.Logging;
 
 namespace HDE.IpCamEmu.Core.Source
 {
+    [Serializable]
     public class VideoFileSettings : SourceSettings
     {
         #region Properties
@@ -22,7 +23,7 @@ namespace HDE.IpCamEmu.Core.Source
             return new VideoFileSource(
                 log, 
                 Name, 
-                Format, 
+                GetFormat(), 
                 new FileInfo(File).FullName, 
                 BufferFrames, 
                 TimeStart, 

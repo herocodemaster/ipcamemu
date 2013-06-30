@@ -1,8 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using HDE.Platform.Logging;
 
 namespace HDE.IpCamEmu.Core.Source
 {
+    [Serializable]
     public class FolderSettings : SourceSettings
     {
         #region Properties
@@ -16,7 +18,7 @@ namespace HDE.IpCamEmu.Core.Source
 
         internal override ISource Create(ILog log)
         {
-            return new FolderSource(log, Name, new DirectoryInfo(Folder).FullName, Format, BufferFrames, RegionOfInterest);
+            return new FolderSource(log, Name, new DirectoryInfo(Folder).FullName, GetFormat(), BufferFrames, RegionOfInterest);
         }
 
         #endregion

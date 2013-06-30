@@ -1,5 +1,8 @@
+using System;
+
 namespace HDE.IpCamEmu.Core.Source
 {
+    [Serializable]
     public sealed class Region
     {
         #region Properties

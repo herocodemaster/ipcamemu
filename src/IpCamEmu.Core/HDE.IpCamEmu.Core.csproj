@@ -55,6 +55,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnonymousPipeClientStreamLog.cs" />
+    <Compile Include="ChiefWorker\ControlPipeController.cs" />
+    <Compile Include="ConfigurationStaff\CommandLineOptions.cs" />
+    <Compile Include="ConfigurationStaff\ConfigurationHelper.cs" />
     <Compile Include="IpCamEmuSingleInstance.cs" />
     <Compile Include="ServerSettingsBase.cs" />
     <Compile Include="MJpeg\MJpegServer.cs" />
@@ -67,6 +71,7 @@
     <Compile Include="ServerSourceInstance\ServerSourceFactory.cs" />
     <Compile Include="SingleInstance.cs" />
     <Compile Include="Source\ImageHelper.cs" />
+    <Compile Include="Source\IpCamEmuImageFormat.cs" />
     <Compile Include="Source\Region.cs" />
     <Compile Include="Source\VideoFileSettings.cs" />
     <Compile Include="Source\VideoFileSource.cs" />
@@ -93,6 +98,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

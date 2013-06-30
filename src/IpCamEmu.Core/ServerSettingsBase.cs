@@ -4,6 +4,7 @@ using HDE.Platform.Logging;
 
 namespace HDE.IpCamEmu.Core
 {
+    [Serializable]
     public abstract class ServerSettingsBase
     {
         public SourceSettings SourceSettings { get; protected set; }

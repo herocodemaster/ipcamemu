@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Xml;
-using HDE.IpCamEmu.Core;
 using HDE.IpCamEmu.Core.MJpeg;
 using HDE.IpCamEmu.Core.Source;
 
-namespace HDE.IpCamEmu
+namespace HDE.IpCamEmu.Core.ConfigurationStaff
 {
-    static class ServerConfigurationHelper
+    public static class ConfigurationHelper
     {
         /// <summary>
         /// Configuration approach specification:
@@ -103,7 +101,7 @@ namespace HDE.IpCamEmu
                 default: 
                     throw new ArgumentOutOfRangeException(sourceType);
             }
-            result.Format = ParseImageFormat(document.SelectSingleNode("Format").InnerText);
+            result.ImageFormat = ParseImageFormat(document.SelectSingleNode("Format").InnerText);
             result.Name = document.SelectSingleNode("@Name").InnerText;
 
             return result;
@@ -201,31 +199,19 @@ namespace HDE.IpCamEmu
                 );
         }
 
-        private static ImageFormat ParseImageFormat(string format)
+        private static IpCamEmuImageFormat ParseImageFormat(string format)
         {
-            switch (format.ToLowerInvariant())
+            IpCamEmuImageFormat result;
+            if (IpCamEmuImageFormat.TryParse(
+                format,
+                true,
+                out result))
             {
-                case "memorybmp":
-                    return ImageFormat.MemoryBmp;
-                case "bmp":
-                    return ImageFormat.Bmp;
-                case "emf":
-                    return ImageFormat.Emf;
-                case "wmf":
-                    return ImageFormat.Wmf;
-                case "gif":
-                    return ImageFormat.Gif;
-                case "jpeg":
-                    return ImageFormat.Jpeg;
-                case "png":
-                    return ImageFormat.Png;
-                case "tiff":
-                    return ImageFormat.Tiff;
-                case "exif":
-                    return ImageFormat.Exif;
-                case "icon":
-                    return ImageFormat.Icon;
-                default: throw new ArgumentOutOfRangeException(format);
+                return result;
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException(format);
             }
         }
     }

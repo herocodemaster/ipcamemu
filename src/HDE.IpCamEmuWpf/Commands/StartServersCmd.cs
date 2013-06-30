@@ -2,6 +2,7 @@
 using System.Linq;
 using HDE.IpCamEmu;
 using HDE.IpCamEmu.Core;
+using HDE.IpCamEmu.Core.ConfigurationStaff;
 
 namespace HDE.IpCamEmuWpf.Commands
 {
@@ -16,7 +17,7 @@ namespace HDE.IpCamEmuWpf.Commands
                 var allCommandLineArguments = Environment.GetCommandLineArgs();
                 var realCommandLineArguments = new string[allCommandLineArguments.Length - 1 ];
                 Array.Copy(allCommandLineArguments, 1, realCommandLineArguments, 0, realCommandLineArguments.Length);
-                var settings = ServerConfigurationHelper.Load(CommandLineOptions.ParseCommandLineArguments(realCommandLineArguments).Configuration);
+                var settings = ConfigurationHelper.Load(CommandLineOptions.ParseCommandLineArguments(realCommandLineArguments).Configuration);
                 controller.Log.Debug("Starting machinery...");
                 controller.Model.Servers = settings
                     .Select(item => WebServerFactory.CreateServer(controller.Log, item))

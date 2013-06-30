@@ -4,6 +4,7 @@ using HDE.Platform.Logging;
 
 namespace HDE.IpCamEmu.Core.MJpeg
 {
+    [Serializable]
     public class MJpegServerSettings : ServerSettingsBase
     {
         #region Properties

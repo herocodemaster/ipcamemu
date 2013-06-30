@@ -28,7 +28,7 @@ namespace HDE.IpCamEmu.Core.MJpeg
         {
             _log = log;
             _settings = settings;
-            if (settings.SourceSettings.Format != ImageFormat.Jpeg)
+            if (settings.SourceSettings.GetFormat() != ImageFormat.Jpeg)
             {
                 throw new InvalidDataException("Expected input image format is jpeg!");
             }
