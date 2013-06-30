@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using HDE.IpCamEmuWpf.ChiefWorker;
 
 namespace HDE.IpCamEmuWpf.Model
 {
@@ -9,7 +6,7 @@ namespace HDE.IpCamEmuWpf.Model
     {
         #region Properties
 
-        public List<IDisposable> Servers { get; set; }
+        public ChiefWpf Chief { get; set; }
 
         #endregion
     }

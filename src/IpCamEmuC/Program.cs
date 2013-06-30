@@ -1,5 +1,4 @@
 ﻿using HDE.IpCamEmu.ChiefWorker;
-using HDE.IpCamEmu.Core.ChiefWorker;
 using HDE.IpCamEmu.Core.ConfigurationStaff;
 
 namespace HDE.IpCamEmu
@@ -12,9 +11,9 @@ namespace HDE.IpCamEmu
 
             if (options.WorkerSettingsPipeHandle == null)
             {
-                using (var chief = new Chief())
+                using (var chief = new ChiefConsole(options))
                 {
-                    return chief.Launch(options) ? 0 : -1;
+                    return chief.Launch() ? 0 : -1;
                 }
             }
             else

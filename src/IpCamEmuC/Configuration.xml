@@ -23,7 +23,7 @@ netsh http add urlacl url=http://+:1880/ user=comp\drweb86 listen=yes
         <BufferFrames>15</BufferFrames>
       </Source>
     </Server>
-    <!--<Server Type="MJpeg">
+    <Server Type="MJpeg">
       <Uri>http://+:1776/</Uri>
       <FrameDelay>10</FrameDelay>
       <Source Type="folder" Name="QA Images Sequence 'B'">
@@ -33,7 +33,7 @@ netsh http add urlacl url=http://+:1880/ user=comp\drweb86 listen=yes
         <BufferFrames>200</BufferFrames>
       </Source>
     </Server>
-    <Server Type="MJpeg">
+    <!--<Server Type="MJpeg">
       <Uri>http://+:1775/</Uri>
       <FrameDelay>10</FrameDelay>
       <Source Type="webcam" Name="QA WebCam Test (Per Server)">

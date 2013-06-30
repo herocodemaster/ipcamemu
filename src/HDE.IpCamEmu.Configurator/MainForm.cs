@@ -90,11 +90,7 @@ namespace HDE.IpCamEmu.Configurator
 
         private void LoadInformation()
         {
-            var allCommandLineArguments = Environment.GetCommandLineArgs();
-            var realCommandLineArguments = new string[allCommandLineArguments.Length - 1];
-            Array.Copy(allCommandLineArguments, 1, realCommandLineArguments, 0, realCommandLineArguments.Length);
-
-            _settings = ConfigurationHelper.Load(CommandLineOptions.ParseCommandLineArguments(realCommandLineArguments).Configuration);
+            _settings = ConfigurationHelper.Load(CommandLineOptions.ParseCommandLineArguments(CommandLineOptions.GetCurrentProcessCommandLineArguments()).Configuration);
             _userName = _loginTextBox.Text;
             _isLocalUser = string.Compare(Environment.UserDomainName, Environment.MachineName, StringComparison.OrdinalIgnoreCase) == 0;
             _scopeOfRegistration = _settings

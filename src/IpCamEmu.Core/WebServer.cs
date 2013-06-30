@@ -108,7 +108,7 @@ namespace HDE.IpCamEmu.Core
             {
                 if (e.ErrorCode == 5)
                 {
-                    _log.Error("Windows 7 registration is missing:\n1. Launch cmd as Administrator\n2. Paste in command line: netsh http add urlacl url={0} user={1}\\{2} listen=yes",
+                    _log.Error("Windows 7 registration is missing. To fix it please launch Configurator and click 'Register' button or register application by yourself:\n1. Launch cmd as Administrator\n2. Paste in command line: netsh http add urlacl url={0} user={1}\\{2} listen=yes",
                         _uri, 
                         Environment.GetEnvironmentVariable("USERDOMAIN"), 
                         Environment.GetEnvironmentVariable("USERNAME"));

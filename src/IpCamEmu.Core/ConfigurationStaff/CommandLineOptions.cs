@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 
 namespace HDE.IpCamEmu.Core.ConfigurationStaff
@@ -27,6 +28,15 @@ namespace HDE.IpCamEmu.Core.ConfigurationStaff
 
         private CommandLineOptions()
         {
+        }
+
+        public static string[] GetCurrentProcessCommandLineArguments()
+        {
+            var allCommandLineArguments = Environment.GetCommandLineArgs();
+            var realCommandLineArguments = new string[allCommandLineArguments.Length - 1];
+            Array.Copy(allCommandLineArguments, 1, realCommandLineArguments, 0, realCommandLineArguments.Length);
+
+            return realCommandLineArguments;
         }
 
         public static CommandLineOptions ParseCommandLineArguments(string[] args)

@@ -1,4 +1,4 @@
-using System.IO;
+using HDE.IpCamEmu.Core.Log;
 using HDE.IpCamEmuWpf.Commands;
 using HDE.IpCamEmuWpf.Model;
 using HDE.Platform.Logging;
@@ -20,7 +20,7 @@ namespace HDE.IpCamEmuWpf
         public Controller()
         {
             Model = new WpfModel();
-            Log = new SimpleFileLog(Path.Combine(Path.GetTempPath(), @"HDE\IpCamEmu"));
+            Log = new IpCamEmuFileLog();
             Log.Open();
         }
 

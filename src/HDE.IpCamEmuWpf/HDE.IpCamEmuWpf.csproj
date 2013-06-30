@@ -71,6 +71,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ChiefWorker\ChiefWpf.cs" />
     <Compile Include="Commands\StartServersCmd.cs" />
     <Compile Include="Commands\TearDownCmd.cs" />
     <Compile Include="Controller.cs" />

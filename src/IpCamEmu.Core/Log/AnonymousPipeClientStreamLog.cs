@@ -3,7 +3,7 @@ using System.IO;
 using System.IO.Pipes;
 using HDE.Platform.Logging;
 
-namespace HDE.IpCamEmu.Core
+namespace HDE.IpCamEmu.Core.Log
 {
     public class AnonymousPipeClientStreamLog: LogBase
     {

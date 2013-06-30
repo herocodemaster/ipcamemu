@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using HDE.IpCamEmu.Core.ConfigurationStaff;
@@ -8,30 +7,51 @@ using HDE.Platform.Logging;
 
 namespace HDE.IpCamEmu.Core.ChiefWorker
 {
-    public class Chief : IDisposable
+    public abstract class Chief : IDisposable
     {
         #region Fields
 
-        private ILog _log;
+        protected ILog _log;
+        protected readonly CommandLineOptions _options;
 
         #endregion
 
-        public Chief()
+        #region Constructors
+
+        protected Chief(ILog log,
+            CommandLineOptions options)
         {
-            _log = new QueueLog(
-                new ConsoleLog(),
-                new SimpleFileLog(Path.Combine(Path.GetTempPath(), @"HDE\IpCamEmu")));
-            _log.Open();
+            _log = log;
+            if (!log.IsOpened)
+            {
+                log.Open();
+            }
+            _options = options;
         }
 
-        public bool Launch(CommandLineOptions options)
+        #endregion
+
+        #region Properties
+
+        #endregion
+
+        #region Protected Methods
+
+        protected abstract string GetExitOnDemandMessage();
+        protected abstract bool IsExitOnDemand();
+
+        #endregion
+
+        #region Public Methods
+
+        public bool Launch()
         {
+            var workers = new List<ChiefWorkerProcess>();
             try
             {
                 _log.Debug("Loading settings...");
-                var configuration = ConfigurationHelper.Load(options.Configuration);
+                var configuration = ConfigurationHelper.Load(_options.Configuration);
                 _log.Debug("Starting machinery...");
-                var workers = new List<ChiefWorkerProcess>();
                 try
                 {
                     foreach (var workerSettings in configuration)
@@ -46,8 +66,8 @@ namespace HDE.IpCamEmu.Core.ChiefWorker
                         Thread.Sleep(1000);
                     }
 
-                    _log.Debug("Server(s) started...\n\nPress any key to exit.");
-                    while (!Console.KeyAvailable && workers.All(worker => worker.IsAlive))
+                    _log.Debug("Server(s) started...\n\n{0}", GetExitOnDemandMessage());
+                    while (!IsExitOnDemand() && workers.All(worker => worker.IsAlive))
                     {
                         Thread.Sleep(3000);
                     }
@@ -66,10 +86,7 @@ namespace HDE.IpCamEmu.Core.ChiefWorker
                 }
                 finally
                 {
-                    if (workers != null)
-                    {
-                        workers.ForEach(item => item.Dispose());
-                    }
+                    workers.ForEach(item => item.Dispose());
                 }
                 return true;
             }
@@ -80,13 +97,8 @@ namespace HDE.IpCamEmu.Core.ChiefWorker
             }
         }
 
-        public void Dispose()
-        {
-            if (_log != null)
-            {
-                _log.Close();
-                _log = null;
-            }
-        }
+        public abstract void Dispose();
+
+        #endregion
     }
 }

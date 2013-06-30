@@ -4,9 +4,9 @@
     {
         public void TearDown(Controller controller)
         {
-            if (controller.Model.Servers != null)
+            if (controller.Model.Chief != null)
             {
-                controller.Model.Servers.ForEach(item => item.Dispose());
+                controller.Model.Chief.RequestToClose();
             }
         }
     }

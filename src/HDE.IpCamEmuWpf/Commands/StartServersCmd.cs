@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq;
-using HDE.IpCamEmu;
-using HDE.IpCamEmu.Core;
 using HDE.IpCamEmu.Core.ConfigurationStaff;
+using HDE.IpCamEmuWpf.ChiefWorker;
 
 namespace HDE.IpCamEmuWpf.Commands
 {
@@ -12,25 +10,18 @@ namespace HDE.IpCamEmuWpf.Commands
         {
             try
             {
-                controller.Log.Debug("Loading settings...");
+                controller.Model.Chief = new ChiefWpf(
+                    controller.Log,
+                    CommandLineOptions.ParseCommandLineArguments(
+                        CommandLineOptions.GetCurrentProcessCommandLineArguments()));
+                return controller.Model.Chief.Launch();
 
-                var allCommandLineArguments = Environment.GetCommandLineArgs();
-                var realCommandLineArguments = new string[allCommandLineArguments.Length - 1 ];
-                Array.Copy(allCommandLineArguments, 1, realCommandLineArguments, 0, realCommandLineArguments.Length);
-                var settings = ConfigurationHelper.Load(CommandLineOptions.ParseCommandLineArguments(realCommandLineArguments).Configuration);
-                controller.Log.Debug("Starting machinery...");
-                controller.Model.Servers = settings
-                    .Select(item => WebServerFactory.CreateServer(controller.Log, item))
-                    .ToList();
-                controller.Log.Debug("Server(s) started...");
             }
             catch (Exception unhandledException)
             {
                 controller.Log.Error(unhandledException);
                 return false;
             }
-
-            return true;
         }
     }
 }
